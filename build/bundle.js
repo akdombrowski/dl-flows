@@ -143,14 +143,49 @@ const dlFlows = async ({ debug }) => {
   }
 };
 
-const addListenerToDLBtn = () => {
-  const dlBtn = document.getElementById("dlBtn");
-  if (dlBtn) {
-    dlBtn.addEventListener("click", async () => {
-      await downloadFlowJSONFromGH();
+const goBackToIntegrationPage = () => {
+  // Debug controlled via flow instance var `debug`
+  const debugFlowInstVar = "{{global.variables.debug}}";
+  const debug = debugFlowInstVar === "true" ? true : false;
+  const url = new URL(
+    "https://support.pingidentity.com/s/marketplace-integration/a7iDo0000010xwlIAA/passwordless-flow-pack-customer-identities"
+  );
+
+  if (debug) {
+    console.log("url:");
+    console.log(url);
+    console.log("url:", url.toString());
+  }
+
+  window.location = url.toString();
+};
+
+const addListenerToBtn = (btnID, action) => {
+  const btn = document.getElementById(btnID);
+  if (btn) {
+    btn.addEventListener("click", async () => {
+      await action();
     });
   }
 };
+
+// const addListenerToDLBtn = () => {
+//   const btn = document.getElementById("dlBtn");
+//   if (btn) {
+//     btn.addEventListener("click", async () => {
+//       await downloadFlowJSONFromGH();
+//     });
+//   }
+// };
+
+// const addListenerToBackBtn = () => {
+//   const btn = document.getElementById("goToMarketplaceBtn");
+//   if (btn) {
+//     btn.addEventListener("pointerdown", async () => {
+//       await goBackToIntegrationPage();
+//     });
+//   }
+// };
 
 /**
  * The function `runIfPageCompletedLoading` checks if the document has finished
@@ -161,7 +196,10 @@ const addListenerToDLBtn = () => {
 const runIfPageCompletedLoading = (event) => {
   console.log("event:", event);
   if (document.readyState === "complete") {
-    addListenerToDLBtn();
+    addListenerToBtn("goToMarketplaceBtn", goBackToIntegrationPage);
+    addListenerToBtn("dlBtn", downloadFlowJSONFromGH);
+    // addListenerToDLBtn();
+    // addListenerToBackBtn();
     downloadFlowJSONFromGH();
   }
 };
@@ -177,7 +215,9 @@ const waitForPageLoadingCompletion = () => {
   } else {
     // Page had completed loading, trigger the main function
     // Also, add listener to button so the download button still works if needed
-    addListenerToDLBtn();
+    // addListenerToBtn();
+    addListenerToBtn("goToMarketplaceBtn", goBackToIntegrationPage);
+    addListenerToBtn("dlBtn", downloadFlowJSONFromGH);
     downloadFlowJSONFromGH();
   }
 };
