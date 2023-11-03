@@ -178,7 +178,6 @@ const waitForPageLoadingCompletion = () => {
     // Page had completed loading, trigger the main function
     // Also, add listener to button so the download button still works if needed
     addListenerToDLBtn();
-    downloadFlowJSONFromGH();
   }
 };
 
